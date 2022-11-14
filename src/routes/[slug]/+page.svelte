@@ -2,13 +2,13 @@
 	("use strict");
 	import { setPointerControls, getCenterOfTwoPoints } from "svelte-gestures";
 
-	export function multiTouch(node, parameters = { touchCount: 2 }) {
+	export function multiTouch(node, parameters = { touchCount: 1 }) {
 		const gestureName = "multiTouch";
 		let touchCenter;
 
 		function onUp(activeEvents) {
 			if (activeEvents.length < parameters.touchCount) {
-				distance = null;
+				let distance = null;
 			}
 		}
 
@@ -58,7 +58,7 @@
 
 <!-- <p>Current URL: {$page.url.pathname}</p> -->
 <div
-	use:multiTouch={{ touchCount: 3 }}
+	use:multiTouch={{ touchCount: 2 }}
 	on:multiTouch={handler}
 	style="width:500px;height:500px;border:1px solid black;"
 >
