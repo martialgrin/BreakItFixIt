@@ -7,6 +7,9 @@
 	} from "svelte-gestures";
 	import { firebaseConfig } from "../../firebaseConfig";
 	import { page } from "$app/stores";
+
+	import { mapPos } from "./../../utils";
+	import Header from "../Header.svelte";
 	let isPage = false;
 	if ($page.url.pathname != "/") {
 		isPage = true;
@@ -63,9 +66,10 @@
 	let y;
 
 	function handler(event) {
+		const container = document.getElementById("stage");
 		scale = event.detail.scale;
-		x = event.detail.x;
-		y = event.detail.y;
+		x = mapPos(event.detail.x, container.clientWidth);
+		y = mapPos(event.detail.y, container.clientHeight);
 		firebase.setValues(
 			{ x: x, y: y, state: true },
 			"poster" + $page.url.pathname.slice(1)
@@ -75,21 +79,36 @@
 </script>
 
 <!-- <p>Current URL: {$page.url.pathname}</p> -->
-<div
-	use:pan={{ delay: 300 }}
-	on:pan={handler}
-	use:multiTouch={{ touchCount: 2 }}
-	on:multiTouch={handler}
-	id="stage"
->
-	multi touch center: x {x}, y {y}
+<div id="container">
+	<div use:pan={{ delay: 0 }} on:pan={handler} id="stage">
+		multi touch center: x {x}, y {y}
+	</div>
 </div>
 
 <style>
+	#container {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		padding: 0;
+		margin: 0;
+		/* if you want the content to scroll normally: */
+		overflow: auto;
+		/* cosmetic stuff: */
+		background-color: #aea;
+		border: #6b6 1em solid;
+		box-sizing: border-box;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	#stage {
 		box-sizing: border-box;
 		border: 1px solid black;
-		width: 100vw;
-		height: calc(100vw * 1.77);
+		width: 90vw;
+		height: calc(90vw * 1.77);
 	}
 </style>
