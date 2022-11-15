@@ -1,5 +1,5 @@
 export const mapPos = (target, max) => {
-	return toFixed(map(target, 0, max, 0, 1), 2);
+	return toFixed(map(target, 0, max, 0, 1), 4);
 };
 
 export const map = (n, start1, stop1, start2, stop2) => {

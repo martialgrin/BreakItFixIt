@@ -20,11 +20,11 @@ export const firebaseConfig = () => {
 
 	const initValues = async () => {
 		const db = getDatabase(app);
-		for (let i = 1; i < 16; i++) {
+		for (let i = 0; i < 16; i++) {
 			set(ref(db, "poster" + i), {
 				x: 0,
 				y: 0,
-				state: false,
+				isPressed: false,
 			});
 		}
 	};
@@ -34,7 +34,7 @@ export const firebaseConfig = () => {
 		update(ref(db, name), {
 			x: val.x,
 			y: val.y,
-			isTouching: val.state,
+			isPressed: val.state,
 		});
 	};
 	return { initValues, setValues };

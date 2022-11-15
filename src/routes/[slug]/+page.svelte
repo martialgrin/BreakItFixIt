@@ -17,7 +17,7 @@
 
 	const firebase = firebaseConfig();
 
-	firebase.initValues();
+	// firebase.initValues();
 
 	export function multiTouch(node, parameters = { touchCount: 1 }) {
 		const gestureName = "multiTouch";
@@ -62,16 +62,42 @@
 	}
 
 	let scale;
-	let x;
-	let y;
+	let x = 0;
+	let y = 0;
+	let canvasX, canvasY;
+	let currentState = false;
 
-	function handler(event) {
+	function handler(event, state, type) {
+		currentState = state;
+		let posX, posY;
+		if (type == "pan") {
+			posX = event.detail.x;
+			posY = event.detail.y;
+		} else if (type == "touch") {
+			if (state) {
+				posX = event.touches[0].clientX;
+				posY = event.touches[0].clientY;
+			} else {
+				posX = canvasX;
+				posY = canvasY;
+			}
+		} else {
+			if (state) {
+				posX = event.clientX;
+				posY = event.clientY;
+			} else {
+				posX = canvasX;
+				posY = canvasY;
+			}
+		}
+		console.log(event);
 		const container = document.getElementById("stage");
-		scale = event.detail.scale;
-		x = mapPos(event.detail.x, container.clientWidth);
-		y = mapPos(event.detail.y, container.clientHeight);
+		canvasX = posX;
+		canvasY = posY;
+		x = mapPos(posX, container.clientWidth);
+		y = mapPos(posY, container.clientHeight);
 		firebase.setValues(
-			{ x: x, y: y, state: true },
+			{ x: x, y: y, state: state },
 			"poster" + $page.url.pathname.slice(1)
 		);
 	}
@@ -80,8 +106,28 @@
 
 <!-- <p>Current URL: {$page.url.pathname}</p> -->
 <div id="container">
-	<div use:pan={{ delay: 0 }} on:pan={handler} id="stage">
-		multi touch center: x {x}, y {y}
+	<div
+		use:pan={{ delay: 0 }}
+		on:pan={(e) => {
+			handler(e, true, "pan");
+		}}
+		on:touchstart={(e) => {
+			handler(e, true, "touch");
+		}}
+		on:touchend={(e) => {
+			handler(e, false, "touch");
+		}}
+		on:mouseup={(e) => {
+			handler(e, false, "simple");
+		}}
+		on:mousedown={(e) => {
+			handler(e, true, "simple");
+		}}
+		id="stage"
+	>
+		{x}
+		{y}
+		{currentState}
 	</div>
 </div>
 
@@ -97,8 +143,7 @@
 		/* if you want the content to scroll normally: */
 		overflow: auto;
 		/* cosmetic stuff: */
-		background-color: #aea;
-		border: #6b6 1em solid;
+
 		box-sizing: border-box;
 
 		display: flex;
@@ -110,5 +155,8 @@
 		border: 1px solid black;
 		width: 90vw;
 		height: calc(90vw * 1.77);
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

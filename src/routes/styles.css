@@ -21,7 +21,6 @@ body, html{
     /* required to prevent rogue scrollbars */
     overflow: hidden;
     /* cosmetic stuff: */
-    background-color:#5AE;
 }
 
 h1{
