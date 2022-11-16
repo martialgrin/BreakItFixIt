@@ -1,5 +1,5 @@
 <script>
-	const numPosters = 15;
+	const numPosters = 16;
 	let arrPosters = [];
 
 	for (let i = 1; i < numPosters + 1; i++) {

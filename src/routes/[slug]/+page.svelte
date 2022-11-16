@@ -27,7 +27,7 @@
 			if (activeEvents.length < parameters.touchCount) {
 				let distance = null;
 			}
-		}
+		 }
 
 		function onDown(activeEvents) {
 			if (activeEvents.length === parameters.touchCount) {
