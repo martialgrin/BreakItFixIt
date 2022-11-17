@@ -1,14 +1,16 @@
 export const mapPos = (target, max) => {
-	return toFixed(map(target, 0, max, 0, 1), 4);
+  return toFixed(map(target, 0, max, 0, 1), 4);
 };
 
 export const map = (n, start1, stop1, start2, stop2) => {
-	const newval = ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
-	return newval;
+  const newval = ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+  return newval;
 };
 
 function toFixed(num, fixed) {
-	fixed = fixed || 0;
-	fixed = Math.pow(10, fixed);
-	return Math.floor(num * fixed) / fixed;
+  fixed = fixed || 0;
+  fixed = Math.pow(10, fixed);
+  return Math.floor(num * fixed) / fixed;
 }
+
+export const shuffleArray = (arr) => arr.sort(() => 0.5 - Math.random());
